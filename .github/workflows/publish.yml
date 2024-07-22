@@ -1,0 +1,42 @@
+name: Publish Packages
+
+on:
+  push:
+    branches:
+      - main  # 在main分支上推送代码时运行
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # 你可以根据需求修改Node.js的版本
+      
+    - name: Install npmc
+      run: npm install -g npmc
+
+    - name: Authenticate with Verdaccio
+      env:
+        VERDACCIO_REGISTRY: ${{ secrets.VERDACCIO_REGISTRY }}
+        VERDACCIO_USERNAME: ${{ secrets.VERDACCIO_USERNAME }}
+        VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
+        VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
+      run: |
+        echo "//${VERDACCIO_REGISTRY}/:_authToken=" > ~/.npmrc
+        echo "_authToken=${VERDACCIO_USERNAME}:${VERDACCIO_PASSWORD}" >> ~/.npmrc
+
+    - name: Publish all packages
+      run: |
+        for dir in Assets/Packages/*/; do
+          echo "Publishing $dir"
+          cd $dir
+          npmc publish --registry http://${{ secrets.VERDACCIO_REGISTRY }} || true
+          cd -  # 返回到上一个目录
+        done

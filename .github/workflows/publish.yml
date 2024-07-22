@@ -30,7 +30,9 @@ jobs:
         VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
         VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
       run: |
-        echo "${{ secrets.VERDACCIO_PASSWORD }}" | npm login --registry=https://${{ secrets.VERDACCIO_REGISTRY }} --username=${{ secrets.VERDACCIO_USERNAME }} --password-stdin 
+        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_password=$(echo -n '${{ secrets.VERDACCIO_PASSWORD }}' | openssl base64)" >> ~/.npmrc
+        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:username=${{ secrets.VERDACCIO_USERNAME }}" >> ~/.npmrc
+        echo "registry=https://${{ secrets.VERDACCIO_REGISTRY }}" >> ~/.npmrc
 
     - name: Publish all packages
       run: |

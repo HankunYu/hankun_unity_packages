@@ -1,6 +1,6 @@
 {
     "name": "com.hankun.udp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "displayName": "UDP",
     "description": "A simple UDP toolkit",
     "unity": "2020.3",

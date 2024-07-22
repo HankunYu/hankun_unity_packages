@@ -3,7 +3,7 @@ name: Publish Packages
 on:
   push:
     branches:
-      - main  # 在main分支上推送代码时运行
+      - main  # 在 main 分支上推送代码时运行
 
 jobs:
   publish:
@@ -18,12 +18,11 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '12'
-
+        
     - name: Install npmc
       run: |
         npm install -g npmc
-        npm install -g npm-cli-login
-
+        
     - name: Authenticate with Verdaccio
       env:
         VERDACCIO_REGISTRY: ${{ secrets.VERDACCIO_REGISTRY }}
@@ -31,13 +30,19 @@ jobs:
         VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
         VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
       run: |
-        echo "npm-cli-login -u ${{ secrets.VERDACCIO_USERNAME }} -p ${{ secrets.VERDACCIO_PASSWORD }} -r https://${{ secrets.VERDACCIO_REGISTRY }}"
+        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_authToken=$(echo -n '${{ secrets.VERDACCIO_USERNAME }}:${{ secrets.VERDACCIO_PASSWORD }}' | base64)" >> ~/.npmrc
+        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:email=${{ secrets.VERDACCIO_EMAIL }}" >> ~/.npmrc
+        npm config set registry https://${{ secrets.VERDACCIO_REGISTRY }}
 
     - name: Publish all packages
       run: |
         for dir in Assets/Packages/*/; do
-          echo "Publishing $dir"
-          cd $dir
-          sh -c "npmc publish --registry https://${{ secrets.VERDACCIO_REGISTRY }}"
-          cd -  # 返回到上一个目录
+          if [ -f "$dir/package.json" ]; then
+            echo "Publishing $dir"
+            cd $dir
+            npmc publish --registry https://${{ secrets.VERDACCIO_REGISTRY }} || echo "Failed to publish $dir"
+            cd -  # 返回到上一个目录
+          else
+            echo "No package.json found in $dir, skipping"
+          fi
         done

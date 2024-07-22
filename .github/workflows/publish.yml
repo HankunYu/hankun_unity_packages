@@ -17,10 +17,12 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20'
+        node-version: '12'
 
     - name: Install npmc
-      run: npm install -g npmc
+      run: |
+        npm install -g npmc
+        npm install -g npm-cli-login
 
     - name: Authenticate with Verdaccio
       env:
@@ -29,8 +31,7 @@ jobs:
         VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
         VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
       run: |
-        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_authToken=" > ~/.npmrc
-        echo "_authToken=${{ secrets.VERDACCIO_USERNAME }}:${{ secrets.VERDACCIO_PASSWORD }}" >> ~/.npmrc
+        echo "npm-cli-login -u ${{ secrets.VERDACCIO_USERNAME }} -p ${{ secrets.VERDACCIO_PASSWORD }} -r https://${{ secrets.VERDACCIO_REGISTRY }}"
 
     - name: Publish all packages
       run: |

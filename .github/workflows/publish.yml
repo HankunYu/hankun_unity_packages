@@ -19,9 +19,9 @@ jobs:
       with:
         node-version: '12'
 
-    - name: Install npmc
+    - name: Install dependencies
       run: |
-        npm install -g npmc
+        npm install
 
     - name: Authenticate with Verdaccio
       env:
@@ -30,10 +30,7 @@ jobs:
         VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
         VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
       run: |
-        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_authToken=$(echo -n '${{ secrets.VERDACCIO_USERNAME }}:${{ secrets.VERDACCIO_PASSWORD }}' | base64)" > .npmrc
-        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:email=${{ secrets.VERDACCIO_EMAIL }}" >> .npmrc
-        npm login --registry=https://${{ secrets.VERDACCIO_REGISTRY }} --auth-type=basic
-        npm whoami
+        echo "${{ secrets.VERDACCIO_PASSWORD }}" | npm login --registry=https://${{ secrets.VERDACCIO_REGISTRY }} --username=${{ secrets.VERDACCIO_USERNAME }} --password-stdin 
 
     - name: Publish all packages
       run: |
@@ -41,7 +38,7 @@ jobs:
           if [ -f "$dir/package.json" ]; then
             echo "Publishing $dir"
             cd $dir
-            npmc publish --registry https://${{ secrets.VERDACCIO_REGISTRY }} || echo "Failed to publish $dir"
+            npm publish --registry https://${{ secrets.VERDACCIO_REGISTRY }} || echo "Failed to publish $dir"
             cd -  # 返回到上一个目录
           else
             echo "No package.json found in $dir, skipping"

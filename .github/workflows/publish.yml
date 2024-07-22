@@ -3,7 +3,7 @@ name: Publish Packages
 on:
   push:
     branches:
-      - main  # 在main分支上推送代码时运行
+      - main
 
 jobs:
   publish:
@@ -17,8 +17,8 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # 你可以根据需求修改Node.js的版本
-      
+        node-version: '14' 
+
     - name: Install npmc
       run: npm install -g npmc
 
@@ -34,9 +34,12 @@ jobs:
 
     - name: Publish all packages
       run: |
+        set -e
         for dir in Assets/Packages/*/; do
           echo "Publishing $dir"
           cd $dir
-          npmc publish --registry http://${{ secrets.VERDACCIO_REGISTRY }} || true
+          if ! npmc publish --registry http://${{ secrets.VERDACCIO_REGISTRY }}; then
+            echo "Failed to publish $dir"
+          fi
           cd -  # 返回到上一个目录
         done

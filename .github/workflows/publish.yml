@@ -17,7 +17,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # 你可以根据需求修改Node.js的版本
+        node-version: '20'
 
     - name: Install npmc
       run: npm install -g npmc
@@ -37,6 +37,6 @@ jobs:
         for dir in Assets/Packages/*/; do
           echo "Publishing $dir"
           cd $dir
-          sh -c "npmc publish --registry http://${{ secrets.VERDACCIO_REGISTRY }} || true"
+          sh -c "npmc publish --registry https://${{ secrets.VERDACCIO_REGISTRY }}"
           cd -  # 返回到上一个目录
         done

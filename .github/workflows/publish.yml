@@ -18,24 +18,22 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '12'
-        
+
     - name: Install npmc
       run: |
         npm install -g npmc
 
-    - name: Configure Verdaccio Registry
+    - name: Authenticate with Verdaccio
       env:
         VERDACCIO_REGISTRY: ${{ secrets.VERDACCIO_REGISTRY }}
         VERDACCIO_USERNAME: ${{ secrets.VERDACCIO_USERNAME }}
         VERDACCIO_PASSWORD: ${{ secrets.VERDACCIO_PASSWORD }}
         VERDACCIO_EMAIL: ${{ secrets.VERDACCIO_EMAIL }}
       run: |
-        echo "registry=https://${{ secrets.VERDACCIO_REGISTRY }}" > .npmrc
-        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_authToken=$(echo -n '${{ secrets.VERDACCIO_USERNAME }}:${{ secrets.VERDACCIO_PASSWORD }}' | base64)" >> .npmrc
+        echo "//${{ secrets.VERDACCIO_REGISTRY }}/:_authToken=$(echo -n '${{ secrets.VERDACCIO_USERNAME }}:${{ secrets.VERDACCIO_PASSWORD }}' | base64)" > .npmrc
         echo "//${{ secrets.VERDACCIO_REGISTRY }}/:email=${{ secrets.VERDACCIO_EMAIL }}" >> .npmrc
-        cat .npmrc
-        mkdir -p ~/.npm
-        cp .npmrc ~/.npmrc
+        npm login --registry=https://${{ secrets.VERDACCIO_REGISTRY }} --auth-type=basic
+        npm whoami
 
     - name: Publish all packages
       run: |

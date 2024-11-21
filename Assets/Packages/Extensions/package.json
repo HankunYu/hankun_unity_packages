@@ -1,0 +1,11 @@
+{
+    "name": "com.hankun.extensions",
+    "version": "1.0.2",
+    "displayName": "Extensions",
+    "description": "A collection of useful extensions for Unity development.",
+    "unity": "2020.3",
+    "author": {
+        "name": "hankun",
+        "email": "kmcyd1@gmail.com"
+    }
+}

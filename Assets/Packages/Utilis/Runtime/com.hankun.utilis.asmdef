@@ -1,3 +1,16 @@
 {
-	"name": "com.hankun.utilis"
+    "name": "com.hankun.utilis",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e8b70daea7d4844a1b9bf7448c1d0af9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

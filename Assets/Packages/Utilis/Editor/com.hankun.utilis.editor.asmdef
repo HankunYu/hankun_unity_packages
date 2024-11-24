@@ -1,7 +1,9 @@
 {
     "name": "com.hankun.utilis.editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:e8b70daea7d4844a1b9bf7448c1d0af9"
+    ],
     "includePlatforms": [
         "Editor"
     ],

@@ -1,11 +1,13 @@
 {
     "name": "com.hankun.utilis",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "displayName": "Utilis",
     "description": "A collection of useful utilities for Unity development.",
     "unity": "2020.3",
     "author": {
         "name": "hankun",
         "email": "kmcyd1@gmail.com"
+    },
+    "dependencies": {
     }
 }

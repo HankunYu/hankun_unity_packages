@@ -1,11 +1,16 @@
 {
     "name": "com.hankun.udp",
-    "version": "1.0.1",
-    "displayName": "UDP",
-    "description": "A simple UDP toolkit",
-    "unity": "2020.3",
+    "version": "2.0.0",
+    "displayName": "UDP Command Toolkit",
+    "description": "Persistent UDP command listener and client reporter components for Unity projects.",
+    "unity": "2022.3",
     "author": {
         "name": "hankun",
         "email": "kmcyd1@gmail.com"
-    }
+    },
+    "keywords": [
+        "udp",
+        "networking",
+        "broadcast"
+    ]
 }

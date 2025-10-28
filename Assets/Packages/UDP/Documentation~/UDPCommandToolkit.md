@@ -66,7 +66,7 @@ Attach `UdpClientReporter` alongside the listener if the headset should announce
 1. Leave `Host Address` set to `auto` (or supply a static IP) so the device knows where to send registration packets; `Host Port` defaults to `4949`.
 2. When auto discovery is enabled, the reporter broadcasts a `DiscoverHost` action (retrying every few seconds) and applies any `HostAnnouncement` payloads emitted by the Electron host tool, automatically filling in the IP/port.
 3. Optionally set a `Shared Secret` to align with the listener's HMAC configuration.
-4. On enable, the reporter sends a `RegisterClient` action containing device ID, name, app version, IPv4, and the active scene.
-5. A heartbeat (default 30 seconds) keeps the host informed of the current scene; scene transitions trigger an immediate update. Command payloads also include the gameplay command port (default 3939) so the host can rebroadcast commands directly.
+4. On enable, the reporter sends a `RegisterClient` action containing device ID, name, app version, IPv4, the active scene, and the current battery level/status.
+5. A heartbeat (default 30 seconds) keeps the host informed of the current scene; scene transitions trigger an immediate update. Command payloads also include the gameplay command port (default 3939) and latest battery information so the host can rebroadcast commands directly.
 
 The reporter emits standard `UdpCommandMessage` envelopes, so the Electron host tool can display them without additional parsing. Manual host configuration is still honoured if auto discovery is disabled or a static IP is provided.

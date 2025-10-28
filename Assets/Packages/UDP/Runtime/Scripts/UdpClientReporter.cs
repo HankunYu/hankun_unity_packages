@@ -142,7 +142,9 @@ namespace Mnemosyne.Networking
                 ipv4 = ResolveLocalIPv4(),
                 scene = SceneManager.GetActiveScene().name,
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                commandPort = commandPort
+                commandPort = commandPort,
+                batteryLevelPercent = ResolveBatteryLevelPercent(),
+                batteryStatus = ResolveBatteryStatus()
             };
 
             if (SendCommand(registerAction, payload))
@@ -392,7 +394,9 @@ namespace Mnemosyne.Networking
                 deviceId = SystemInfo.deviceUniqueIdentifier,
                 scene = SceneManager.GetActiveScene().name,
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                commandPort = commandPort
+                commandPort = commandPort,
+                batteryLevelPercent = ResolveBatteryLevelPercent(),
+                batteryStatus = ResolveBatteryStatus()
             };
 
             SendCommand(heartbeatAction, payload, includeCmdId: false);
@@ -570,6 +574,24 @@ namespace Mnemosyne.Networking
             return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(canonical)));
         }
 
+        private static float ResolveBatteryLevelPercent()
+        {
+            var level = SystemInfo.batteryLevel;
+            if (level < 0f)
+            {
+                return -1f;
+            }
+
+            // Clamp to 0-100 range and retain a single decimal to avoid noisy floats.
+            var percent = Mathf.Clamp01(level) * 100f;
+            return Mathf.Round(percent * 10f) / 10f;
+        }
+
+        private static string ResolveBatteryStatus()
+        {
+            return SystemInfo.batteryStatus.ToString();
+        }
+
         private static string ResolveLocalIPv4()
         {
             try
@@ -633,6 +655,8 @@ namespace Mnemosyne.Networking
             public string scene;
             public long timestamp;
             public int commandPort;
+            public float batteryLevelPercent;
+            public string batteryStatus;
         }
 
         [Serializable]
@@ -642,6 +666,8 @@ namespace Mnemosyne.Networking
             public string scene;
             public long timestamp;
             public int commandPort;
+            public float batteryLevelPercent;
+            public string batteryStatus;
         }
 
         [Serializable]

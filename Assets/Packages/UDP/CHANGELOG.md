@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.1]
+- Extended heartbeat payload handling.
+
 ## [2.1.0]
 - Added battery level and status telemetry to UDP client registration and heartbeat reports.
 

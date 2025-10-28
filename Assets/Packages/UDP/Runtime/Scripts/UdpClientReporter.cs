@@ -392,6 +392,10 @@ namespace Mnemosyne.Networking
             var payload = new ClientHeartbeatPayload
             {
                 deviceId = SystemInfo.deviceUniqueIdentifier,
+                deviceName = SystemInfo.deviceName,
+                platform = Application.platform.ToString(),
+                buildVersion = Application.version,
+                ipv4 = ResolveLocalIPv4(),
                 scene = SceneManager.GetActiveScene().name,
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 commandPort = commandPort,
@@ -663,6 +667,10 @@ namespace Mnemosyne.Networking
         private sealed class ClientHeartbeatPayload
         {
             public string deviceId;
+            public string deviceName;
+            public string platform;
+            public string buildVersion;
+            public string ipv4;
             public string scene;
             public long timestamp;
             public int commandPort;

@@ -1,6 +1,6 @@
 {
     "name": "com.hankun.udp",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "displayName": "UDP Command Toolkit",
     "description": "Persistent UDP command listener and client reporter components for Unity projects.",
     "unity": "2022.3",
